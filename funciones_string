@@ -1,0 +1,89 @@
+char y cadenas de texto:
+
+prefijo "mb_" para caracteres especiales
+strtolower()     pasa a minúsculas
+strtoupper()     pasa a mayúsculas
+len()            cuenta el número de caracteres
+ucfirst()        pone la primera letra en mayúscula
+trim()           borra espacios vacíos al inicio y final de un texto
+
+substr("string", 0, 4) substrae los caracteres del rango marcado
+strpos($texto, $string) busca el string dentro del texto devolviendo el índice num de donde empieza y si no la encuentra de vuelve false     //string position(?) 
+*Versión Multibyte: Usa mb_strpos() si la frase tiene tildes antes de la palabra que buscas, porque si no, contará mal la posición.
+
+str_replace($lo_que_buscas, $el_reemplazo, $texto_original) reemplaza palabras o texto
+
+"
+$lista = "manzana,pera,limón";                      convierte un texto en array donde cada elemento termina donde hay caracteres especiales
+$frutas = explode(",", $lista);
+// Resultado: Un array donde $frutas[0] es "manzana", $frutas[1] es "pera", etc.
+"
+
+"                                                   junta los valores de un array en un solo texto, separando cada elemento con el caracter que le indiques
+$misespedes = ['Juan', 'Pedro', 'Ana'];
+$texto = implode(" - ", $misespedes);
+// Resultado: "Juan - Pedro - Ana"
+"
+
+"                                                   repite el texto que le indiques la cantidad de veces que le indiques
+echo str_repeat("Eco! ", 3);
+// Resultado: "Eco! Eco! Eco! "
+"
+
+password_hash("mi_clave123", PASSWORD_DEFAULT)                               encriptar contraseñas
+password_verify("mi_clave123", $hash_guardado) (Devuelve true o false)       compara contraseñas sin desencriptarlas
+
+
+
+
+
+
+
+
+<!--La función htmlspecialchars() es el escudo principal de tu página web contra ataques informáticos llamados XSS (Cross-Site Scripting).
+Sirve para transformar cualquier código que escriba un usuario en texto simple y aburrido, impidiendo que el navegador web lo ejecute como código real. [1, 2] 
+------------------------------
+## 🛡️ ¿CÓMO funciona? (La transformación)
+El navegador web (Chrome, Firefox, etc.) lee e interpreta etiquetas como <h1>, <script>, o <b> para darle forma a la página.
+Si un usuario escribe esos caracteres (<, >, &, ", '), htmlspecialchars() los desarma reemplazándolos por entidades HTML (códigos especiales que el navegador solo dibuja, pero no ejecuta): [3, 4] 
+
+* El carácter < se convierte en &lt; (significa Less Than / Menor que).
+* El carácter > se convierte en &gt; (significa Greater Than / Mayor que).
+* El carácter & se convierte en &amp;.
+* Las comillas " se convierten en &quot;. [5, 6, 7, 8, 9] 
+
+## Ejemplo visual:
+
+* Texto peligroso ingresado: <script>alert('hackeado')</script>
+* Texto después de pasar por la función: &lt;script&gt;alert('hackeado')&lt;/script&gt;
+
+Para el ojo humano en la pantalla se verá exactamente igual: <script>alert('hackeado')</script>. Pero para el navegador, ya no es un código vivo, es solo un texto inofensivo impreso en la página.
+------------------------------
+## 📅 ¿CUÁNDO se debe usar?
+La regla de oro en programación web es: "Nunca confíes en los datos del usuario".
+Debes usar htmlspecialchars() siempre que vayas a mostrar en pantalla un texto que provenga de afuera, es decir, que haya sido escrito por una persona o venga de una base de datos externa.
+## Ejemplos perfectos para usarlo:
+
+   1. Caja de comentarios: Si un usuario escribe un comentario en tu blog.
+   2. Buscador del sitio: Cuando muestras el texto "Resultados para la búsqueda: lo que escribió el usuario".
+   3. Perfil de usuario: Al mostrar el nombre o la biografía que alguien rellenó en su perfil.
+   4. Formularios: Si el usuario comete un error en un formulario y le devuelves los campos rellenos para que no los vuelva a escribir. [10, 11, 12] 
+
+------------------------------
+## 💻 ¿CÓMO se usa en el código? (Ejemplo práctico)
+Imagina que tienes un foro y alguien publica un comentario intentando romper tu página con JavaScript:
+
+// 1. El usuario malicioso envía esto en tu formulario
+$comentario_peligroso = "<script>window.location='http://web-hacker.com';</script>";
+
+// 2. Si lo muestras DIRECTAMENTE, tu página redirigirá a todos los visitantes a la web del hacker:
+// echo $comentario_peligroso; // ❌ ¡GRAVE ERROR DE SEGURIDAD!
+
+// 3. LA FORMA CORRECTA Y SEGURA:
+$comentario_seguro = htmlspecialchars($comentario_peligroso, ENT_QUOTES, 'UTF-8');
+
+echo $comentario_seguro; 
+// 🔑 Muestra el texto en pantalla de forma segura. Nadie es redirigido.
+
+(Nota: Los parámetros ENT_QUOTES y 'UTF-8' son buenas prácticas para asegurar que también proteja las comillas simples y maneje bien los acentos). [13] 
+-->
