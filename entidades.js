@@ -29,7 +29,7 @@ export class Entidad{
         inicio(){
             this.ctxOculto.drawImage(this.imagen, 0, 0);
             this.cambiarColor(this.colores);
-            console.log(pincel.aNormal(this.ctxOculto, this.canvasOculto));
+            //console.log(pincel.aNormal(this.ctxOculto, this.canvasOculto));
         }
         cambiarColor(color){
             let Dataimage = pincel.aNormal(this.ctxOculto, this.canvasOculto);
@@ -49,28 +49,43 @@ export class Entidad{
 
             for(let i = 0; i < Data.length; i += 4){
                 let aux = false;
-                if(Data[i + 3] >0 && Data[i] === 0 && Data[i + 1] === 0 && Data [i + 2] === 0) continue;
+                const hsv_Data = calculo.rgbaToHsv(Data[i], Data[i + 1], Data[i + 2]);
                 for(let j = 0; j < colores_viejos.length; j++){
-                    let aux_Data = calculo.rgbaToHsv(Data[i], Data[i + 1], Data[i + 2]);
-                    if(!colores_viejos[j] || !colores_nuevos[j]) continue;
-                    let diferencia = aux_Data.h - colores_viejos_hsv[j].h;
-                    if(Math.abs(diferencia) < 20)
+                    const diferencia = hsv_Data.h - colores_viejos_hsv[j].h;
+                    if(Math.abs(diferencia) < 20){
+                        if(hsv_Data.s > colores_viejos_hsv[j].s || hsv_Data.v > colores_viejos_hsv[j].v) colores_viejos_hsv[j].s = hsv_Data.s;
+                        aux = true;
+                        break;
+                    }
+                }
+                if(!aux && Data[i + 3] !== 0){
+                    colores_viejos.push([Data[i], Data[i + 1], Data[i + 2]]);
+                    colores_viejos_hsv.push(hsv_Data);
+                }
+            }
+            for(let i = 0; i < Data.length; i += 4){
+                const hsv_Data = calculo.rgbaToHsv(Data[i], Data[i + 1], Data[i + 2]);
+                let aux = false;
+                for(let j = 0; j< colores_viejos.length && j < colores_nuevos.length; j++)
+                {
+                    const diferencia_h = hsv_Data.h - colores_viejos_hsv[j].h;
+                    const diferencia_s = hsv_Data.s - colores_viejos_hsv[j].s;
+                    const diferencia_v = hsv_Data.v - colores_viejos_hsv[j].v;
+                    if(Math.abs(diferencia_h)<= 20)
                     {
-                        aux_Data.h = colores_nuevos_hsv[j].h + diferencia;
-                        if(aux_Data.h < 0) aux_Data.h += 360;
-                        if(aux_Data.h > 360) aux_Data.h -= 360;
+                        hsv_Data.h = colores_nuevos_hsv[j].h/*+ diferencia_h*/;
+                        if(hsv_Data.h < 0) hsv_Data.h += 360;
+                        if(hsv_Data.h > 360) hsv_Data.h -= 360;
 
-                        /*let aux_s = aux_Data.s - colores_viejos_hsv[j].s;
-                        aux_Data.s = colores_nuevos_hsv[j].s + aux_s;
-                        if(aux_Data.s < 0) aux_Data.s += aux_s*2;
-                        if(aux_Data.s > 100) aux_Data.s -= aux_s*2;
+                        //hsv_Data.s = colores_nuevos_hsv[j].s + diferencia_s;
+                        if(hsv_Data.s < 0) hsv_Data.s += 100;
+                        if(hsv_Data.s > 100) hsv_Data.s -= 100;
 
-                        let aux_v = aux_Data.v - colores_viejos_hsv[j].v;
-                        aux_Data.v = colores_nuevos_hsv[j].v + aux_v;
-                        if(aux_Data.v < 0) aux_Data.v += aux_v*2;
-                        if(aux_Data.v > 100) aux_Data.v -= aux_v*2;*/
+                        //hsv_Data.v = colores_nuevos_hsv[j].v + diferencia_v;
+                        if(hsv_Data.v < 0) hsv_Data.v += 100;
+                        if(hsv_Data.v > 100) hsv_Data.v -= 100;
 
-                        let nuevoColor = calculo.hsvToRgba(aux_Data.h, aux_Data.s, aux_Data.v);
+                        let nuevoColor = calculo.hsvToRgba(hsv_Data.h, hsv_Data.s, hsv_Data.v);
                         Data[i] = nuevoColor.r;
                         Data[i + 1] = nuevoColor.g;
                         Data[i + 2] = nuevoColor.b;
@@ -79,42 +94,11 @@ export class Entidad{
                         break;
                     }
                 }
-                if(!aux && Data[i + 3] !== 0/* && Data[i] !== 0 && Data[i + 1] !== 0 && Data[i + 2] !== 0*/){
-                    let j = colores_viejos.length;
-                    colores_viejos.push([Data[i], Data[i + 1], Data[i + 2]]);
-                    colores_viejos_hsv.push(calculo.rgbaToHsv(colores_viejos[j][0], colores_viejos[j][1], colores_viejos[j][2]));
-                    if(colores_nuevos[j] === undefined) continue;
-                    Data[i] = colores_nuevos[j][0];
-                    Data[i + 1] = colores_nuevos[j][1];
-                    Data[i + 2] = colores_nuevos[j][2];
-                }/*
-                else if(Data[i + 3] != 255)
+                if(!aux)
                 {
-                    Data[i + 3] = 255;
-                    Data[i] = 255;
-                    Data[i + 1] = 255;
-                    Data[i + 2] = 255;
+                    continue;
                 }
-                else if(Data[i] === 0 && Data[i + 1] === 0 && Data[i + 2] === 0)
-                {
-                    Data[i] = 255;
-                    Data[i + 1] = 100;
-                    Data[i + 2] = 0;
-                }*/
             }
-            /*
-            for(let i = 0; i < Data.length; i += 4){
-                for(let j = 0; j < this.colores.length; j++){
-                    if(colores_nuevos[j] === undefined) continue;
-                    if(Data[i] === colores_viejos[j][0] && Data[i + 1] === colores_viejos[j][1] && Data[i + 2] === colores_viejos[j][2]){
-                        Data[i] = colores_nuevos[j][0];
-                        Data[i + 1] = colores_nuevos[j][1];
-                        Data[i + 2] = colores_nuevos[j][2];
-                    }
-                }
-            }*/
-           console.log(colores_nuevos);
-           console.log(colores_viejos);
            this.ctxOculto.putImageData(Dataimage, 0, 0);
         }
         guardarimagen(src) {

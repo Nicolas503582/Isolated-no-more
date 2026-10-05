@@ -52,11 +52,10 @@ export class calculos{
             a: a            // 0 - 255
         };
     }
-
     hsvToRgba(h, s, v, a = 255) {
         if(h != 0 || s != 0 || v != 0)
         {
-        console.log({h, s, v, a});
+            //console.log({h, s, v, a});
         }
         // Normalizamos S y V
         s /= 100;
@@ -97,12 +96,12 @@ export class calculos{
         }
 
         // Volvemos de 0-1 a 0-255
-        console.log({
+        /*console.log({
             r: Math.round((r + m) * 255),
             g: Math.round((g + m) * 255),
             b: Math.round((b + m) * 255),
             a: a
-    });
+    });*/
         return {
             r: Math.round((r + m) * 255),
             g: Math.round((g + m) * 255),

@@ -4,19 +4,27 @@ import { calculos } from "./general.js";
 
 const calculo = new calculos();
 
-let canvas = document.getElementById("juego");
+let canvas = document.getElementById("selector");
 let ctx = canvas.getContext("2d");
+canvas.width = 100;
+canvas.height = 100;
+let selector = document.getElementById("selector_de_color");
+let valorActual = 0;
 
 let entidades = [];
-let robot1 = new Entidad(100, 100, "robot3.png", ["red", "blue", "green", "yellow", "orange", "purple", "pink", "brown", "black", "white"]);
-let h = 0;
+let robot1 = new Entidad(500, 500, "robot3.png", ["red", "blue", "green", "yellow", "orange", "purple", "pink", "brown", "black", "white"]);
 
 entidades.push(robot1);
 
+
+let h = 0;
 function loop() {
     ctx.fillStyle = "white";
     ctx.fillRect(0,0, canvas.height, canvas.width);
 
+    h = valorActual;
+    console.log(h);
+    
     const color_nuevo = calculo.hsvToRgba(h, 100, 100);
     robot1.cambiarColor([`rgb(${color_nuevo.r},${color_nuevo.g},${color_nuevo.b})`]);
 
@@ -26,6 +34,8 @@ function loop() {
     
     requestAnimationFrame(loop);
 }
+
+
 
 function ajustarResolucionCanvas(can, contexto) {
     const anchoVisual = window.innerWidth -10;
@@ -58,4 +68,10 @@ window.addEventListener("resize", ajustarResolucionCanvas);
 
 
 ajustarResolucionCanvas(canvas, ctx);
+
+
+selector.addEventListener("input", function() {
+    valorActual = selector.value;
+});
+
 loop();
