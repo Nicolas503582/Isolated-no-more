@@ -5,7 +5,7 @@ let canvas = document.getElementById("juego");
 let ctx = canvas.getContext("2d");
 
 let entidades = [];
-let robot1 = new Entidad(100, 100, "robot_designs.png", ["red", "blue", "green", "yellow", "orange", "purple", "pink", "brown", "black", "white"]);
+let robot1 = new Entidad(100, 100, "sentado.png", ["red", "blue", "green", "yellow", "orange", "purple", "pink", "brown", "black", "white"]);
 
 entidades.push(robot1);
 

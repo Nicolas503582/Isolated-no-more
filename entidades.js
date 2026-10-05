@@ -49,6 +49,7 @@ export class Entidad{
 
             for(let i = 0; i < Data.length; i += 4){
                 let aux = false;
+                if(Data[i + 3] >0 && Data[i] === 0 && Data[i + 1] === 0 && Data [i + 2] === 0) continue;
                 for(let j = 0; j < colores_viejos.length; j++){
                     let aux_Data = calculo.rgbaToHsv(Data[i], Data[i + 1], Data[i + 2]);
                     if(!colores_viejos[j] || !colores_nuevos[j]) continue;
@@ -59,7 +60,7 @@ export class Entidad{
                         if(aux_Data.h < 0) aux_Data.h += 360;
                         if(aux_Data.h > 360) aux_Data.h -= 360;
 
-                        let aux_s = aux_Data.s - colores_viejos_hsv[j].s;
+                        /*let aux_s = aux_Data.s - colores_viejos_hsv[j].s;
                         aux_Data.s = colores_nuevos_hsv[j].s + aux_s;
                         if(aux_Data.s < 0) aux_Data.s += aux_s*2;
                         if(aux_Data.s > 100) aux_Data.s -= aux_s*2;
@@ -67,7 +68,7 @@ export class Entidad{
                         let aux_v = aux_Data.v - colores_viejos_hsv[j].v;
                         aux_Data.v = colores_nuevos_hsv[j].v + aux_v;
                         if(aux_Data.v < 0) aux_Data.v += aux_v*2;
-                        if(aux_Data.v > 100) aux_Data.v -= aux_v*2;
+                        if(aux_Data.v > 100) aux_Data.v -= aux_v*2;*/
 
                         let nuevoColor = calculo.hsvToRgba(aux_Data.h, aux_Data.s, aux_Data.v);
                         Data[i] = nuevoColor.r;
