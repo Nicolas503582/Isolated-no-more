@@ -42,8 +42,10 @@ export class Entidad{
             let colores_nuevos_hsv = [];
             let colores_viejos = [];
             let colores_viejos_hsv = [];
-            const nuevo_tono = tono-50;
-            const nueva_saturacion = saturacion-50;
+            let menor_s = 0;
+            let mayor_s = 0;
+            let menor_v = 0;
+            let mayor_v = 0;
 
             for(let i = 0; i<color.length; i++){
                 this.ctxAux.fillStyle = color[i];
@@ -56,11 +58,35 @@ export class Entidad{
             for(let i = 0; i < Data.length; i += 4){
                 let aux = false;
                 const hsv_Data = calculo.rgbaToHsv(Data[i], Data[i + 1], Data[i + 2]);
+                if(hsv_Data.v > 95 || hsv_Data.v < 5) continue;
                 for(let j = 0; j < colores_viejos.length; j++){
                     const diferencia = hsv_Data.h - colores_viejos_hsv[j].h;
                     if(Math.abs(diferencia) < 20){
                         if(hsv_Data.s > colores_viejos_hsv[j].s || hsv_Data.v > colores_viejos_hsv[j].v) colores_viejos_hsv[j].s = hsv_Data.s;
                         aux = true;
+                        if(menor_s[j])
+                        {
+                            if(hsv_Data.s < menor_s)
+                            {
+                                console.log("             Menor_S:     antes: " + menor_s + "  ahora: " + hsv_Data.s);
+                                menor_s = Math.floor(hsv_Data.s);
+                            }
+                            else if(hsv_Data.s > mayor_s[j])
+                            {
+                                console.log("             Mayor_S:     antes: " + mayor_s + "  ahora: " + hsv_Data.s);
+                                mayor_s = Math.floor(hsv_Data.s);
+                            }
+                            if(hsv_Data.v < menor_v[j])
+                            {
+                                console.log("             Menor_V:     antes: " + menor_v + "  ahora: " + hsv_Data.v);
+                                menor_v = Math.floor(hsv_Data.v);
+                            }
+                            else if(hsv_Data.v > mayor_v[j])
+                            {
+                                console.log("             Mayor_V:     antes: " + mayor_v + "  ahora: " + hsv_Data.v);
+                                mayor_v = Math.floor(hsv_Data.v);
+                            }
+                        }
                         break;
                     }
                 }
@@ -68,27 +94,71 @@ export class Entidad{
                     colores_viejos.push([Data[i], Data[i + 1], Data[i + 2]]);
                     colores_viejos_hsv.push(hsv_Data);
                 }
+            }/*
+            console.log("menor_s:" + menor_s);
+            console.log("mayor_s:" + mayor_s);
+            console.log("menor_v:" + menor_v);
+            console.log("mayor_v:" + mayor_v);*/
+            
+
+            const nuevo_tono = tono-50;
+            const nueva_saturacion = saturacion-50;
+            let aux_tono = 0;
+            let aux_s = 0;
+            if(nuevo_tono > 0)
+            {
+                aux_tono = mayor_v + nuevo_tono;
+                if(aux_tono >95)
+                {
+                    aux_tono = 95 - mayor_v;
+                }
+            }
+            else
+            {
+                aux_tono = menor_v + nuevo_tono;
+                if(aux_tono <5)
+                {
+                    aux_tono = menor_v;
+                }
+            }
+            if(nueva_saturacion > 0)
+            {
+                aux_s = mayor_s + nueva_saturacion;
+                if(aux_s >95)
+                {
+                    aux_s = 95 - mayor_s;
+                }
+            }
+            else
+            {
+                aux_s = menor_s + nueva_saturacion;
+                if(aux_s <5)
+                {
+                    aux_s = menor_s;
+                }
             }
             for(let i = 0; i < Data.length; i += 4){
                 const hsv_Data = calculo.rgbaToHsv(Data[i], Data[i + 1], Data[i + 2]);
                 let aux = false;
+                if(hsv_Data.v > 95 || hsv_Data.v < 5) continue;
                 for(let j = 0; j< colores_viejos.length && j < colores_nuevos.length; j++)
                 {
+
                     const diferencia_h = hsv_Data.h - colores_viejos_hsv[j].h;
-                    const diferencia_s = hsv_Data.s - colores_viejos_hsv[j].s;
-                    const diferencia_v = hsv_Data.v - colores_viejos_hsv[j].v;
+                    /*const diferencia_s = hsv_Data.s - colores_viejos_hsv[j].s;
+                    const diferencia_v = hsv_Data.v - colores_viejos_hsv[j].v;*/
                     if(Math.abs(diferencia_h)<= 20)
                     {
                         hsv_Data.h = colores_nuevos_hsv[j].h/*+ diferencia_h*/;
                         if(hsv_Data.h < 0) hsv_Data.h += 360;
                         if(hsv_Data.h > 360) hsv_Data.h -= 360;
 
-                        hsv_Data.s += nueva_saturacion;
+                        //hsv_Data.s += nueva_saturacion - this.saturacion_viejo;
                         if(hsv_Data.s < 0) hsv_Data.s = 0;
                         if(hsv_Data.s > 100) hsv_Data.s = 100;
 
                         //hsv_Data.v = colores_nuevos_hsv[j].v + diferencia_v;
-                        hsv_Data.v += nuevo_tono - this.tono_viejo;
+                        //hsv_Data.v += nuevo_tono - this.tono_viejo;
                         if(hsv_Data.v < 0) hsv_Data.v = 0;
                         if(hsv_Data.v > 100) hsv_Data.v = 100;
 
@@ -106,8 +176,8 @@ export class Entidad{
                     continue;
                 }
             }
-            this.tono_viejo = nuevo_tono;
-            this.saturacion_viejo = nueva_saturacion;
+            this.tono_viejo = aux_tono;
+            this.saturacion_viejo = aux_s;
             this.ctxOculto.putImageData(Dataimage, 0, 0);
         }
         guardarimagen(src) {

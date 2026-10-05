@@ -23,6 +23,10 @@ const brazo_mas = document.getElementById("brazo_+");
 const brazo_men = document.getElementById("brazo_-");
 const pierna_mas = document.getElementById("pierna_+");
 const pierna_men = document.getElementById("pierna_-");
+let brazo = 0;
+let pierna = 0;
+let torso = 0;
+let cabeza = 0;
 
 let entidades = [];
 let robot1 = new Entidad(0, 0, "robot3.png", ["red", "blue", "green", "yellow", "orange", "purple", "pink", "brown", "black", "white"]);
@@ -40,7 +44,7 @@ function loop() {
     h = valorActual;
     v = tonoActual;
     s = saturacionActual;
-    console.log(s);
+    //console.log(s);
     
     const color_nuevo = calculo.hsvToRgba(h, 100, 100);
     robot1.cambiarColor([`rgb(${color_nuevo.r},${color_nuevo.g},${color_nuevo.b})`], v, s);
@@ -87,5 +91,41 @@ selector_saturacion.addEventListener("input", function() {
     saturacionActual = selector_saturacion.value;
 });
 
+
+cabeza_mas.addEventListener("click", function(){
+    cabeza += 1;
+    if(cabeza >2) cabeza = 2;
+});
+cabeza_men.addEventListener("click", function(){
+    cabeza -= 1;
+    if(cabeza <0) cabeza = 0;
+});
+
+torso_mas.addEventListener("click", function(){
+   torso += 1;
+   if(torso >2) torso = 2;
+});
+torso_men.addEventListener("click", function(){
+   torso -= 1;
+   if(torso <0) torso = 0;
+});
+
+brazo_mas.addEventListener("click", function(){
+   brazo += 1;
+   if(brazo >2) brazo = 2;
+});
+brazo_men.addEventListener("click", function(){
+   brazo -= 1;
+   if(brazo <0) brazo = 0;
+});
+
+pierna_mas.addEventListener("click", function(){
+    pierna += 1;
+    if(pierna >2) pierna = 2;
+});
+pierna_men.addEventListener("click", function(){
+    pierna -= 1;
+    if(pierna <0) pierna = 0;
+});
 
 loop();
