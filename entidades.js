@@ -5,7 +5,7 @@ const pincel = new dibujo();
 const calculo = new calculos();
 
 export class Entidad{
-        constructor(x, y, imagen = "", colores_iniciales){
+        constructor(x, y, imagen = "", colores_iniciales, tono = 50, saturacion = 50){
             //this.listo = false;
             this.x = x;
             this.y = y;
@@ -22,22 +22,28 @@ export class Entidad{
             this.ctxAux = this.canvasAux.getContext('2d');
 
             this.colores = colores_iniciales;
+            this.tono_viejo = 0;
+            this.tono = tono;
+            this.saturacion_viejo = 0;
+            this.saturacion = saturacion;
 
             this.guardarimagen(imagen);
         }
 
         inicio(){
             this.ctxOculto.drawImage(this.imagen, 0, 0);
-            this.cambiarColor(this.colores);
+            this.cambiarColor(this.colores, this.tono);
             //console.log(pincel.aNormal(this.ctxOculto, this.canvasOculto));
         }
-        cambiarColor(color){
+        cambiarColor(color, tono = 50, saturacion = 50){
             let Dataimage = pincel.aNormal(this.ctxOculto, this.canvasOculto);
             let Data = Dataimage.data;
             let colores_nuevos = [];
             let colores_nuevos_hsv = [];
             let colores_viejos = [];
             let colores_viejos_hsv = [];
+            const nuevo_tono = tono-50;
+            const nueva_saturacion = saturacion-50;
 
             for(let i = 0; i<color.length; i++){
                 this.ctxAux.fillStyle = color[i];
@@ -77,13 +83,14 @@ export class Entidad{
                         if(hsv_Data.h < 0) hsv_Data.h += 360;
                         if(hsv_Data.h > 360) hsv_Data.h -= 360;
 
-                        //hsv_Data.s = colores_nuevos_hsv[j].s + diferencia_s;
-                        if(hsv_Data.s < 0) hsv_Data.s += 100;
-                        if(hsv_Data.s > 100) hsv_Data.s -= 100;
+                        hsv_Data.s += nueva_saturacion;
+                        if(hsv_Data.s < 0) hsv_Data.s = 0;
+                        if(hsv_Data.s > 100) hsv_Data.s = 100;
 
                         //hsv_Data.v = colores_nuevos_hsv[j].v + diferencia_v;
-                        if(hsv_Data.v < 0) hsv_Data.v += 100;
-                        if(hsv_Data.v > 100) hsv_Data.v -= 100;
+                        hsv_Data.v += nuevo_tono - this.tono_viejo;
+                        if(hsv_Data.v < 0) hsv_Data.v = 0;
+                        if(hsv_Data.v > 100) hsv_Data.v = 100;
 
                         let nuevoColor = calculo.hsvToRgba(hsv_Data.h, hsv_Data.s, hsv_Data.v);
                         Data[i] = nuevoColor.r;
@@ -99,7 +106,9 @@ export class Entidad{
                     continue;
                 }
             }
-           this.ctxOculto.putImageData(Dataimage, 0, 0);
+            this.tono_viejo = nuevo_tono;
+            this.saturacion_viejo = nueva_saturacion;
+            this.ctxOculto.putImageData(Dataimage, 0, 0);
         }
         guardarimagen(src) {
             this.imagen.src = src;
