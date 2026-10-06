@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="cuerpo">
+        <canvas id = "selector">
+
+        </canvas>
+        <div class="partes_cuerpo">
+            <div id="barras">
+                <input type="range" min="0" max="360" value="0"   id = "selector_de_color">
+                <input type="range" min="25" max ="75" value="50" id = "selector_de_tono">
+                <input type="range" min="25" max ="75" value="50" id = "selector_de_saturacion">
+            </div>
+
+            </input>
+            <div class="parte_cuerpo">
+                <p>cabeza</p>
+                <button id="cabeza_-">
+                    -
+                </button>
+                <button id="cabeza_+">
+                    +
+                </button>
+            </div>
+
+            <div class="parte_cuerpo">
+                <p>torso</p>
+                <button id="torso_-">
+                    -
+                </button>
+                <button id="torso_+">
+                    +
+                </button>
+            </div>
+
+            <div class="parte_cuerpo">
+                <p>brazo</p>
+                <button id="brazo_-">
+                    -
+                </button>
+                <button id="brazo_+">
+                    +
+                </button>
+            </div>
+
+            <div class="parte_cuerpo">
+                <p>pierna</p>
+                <button id="pierna_-">
+                    -
+                </button>
+                <button id="pierna_+">
+                    +
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script type="module" src ="selector.js"></script>
+</body>
+</html>

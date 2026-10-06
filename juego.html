@@ -10,32 +10,8 @@
     <canvas id = "juego">
 
     </canvas>
+
+    <script type="module" src ="juego.js"></script>
+    
 </body>
 </html>
-
-<script>
-    let canvas = document.getElementById("juego");
-    let ctx = canvas.getContext("2d");
-    
-
-    canvas.width = screen.width;
-    canvas.height = screen.height;
-
-    ctx.fillStyle = "red";
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-    function loop() {
-        let robot1 = new Image();
-        robot1.src = "robot1.png";
-    
-
-        canvas.width = window.innerWidth-10;
-        canvas.height = window.innerHeight-10;
-
-        ctx.fillStyle = "red";
-        ctx.fillRect(0, 0, canvas.width, canvas.height);
-        
-        requestAnimationFrame(loop);
-    }
-    loop();
-</script>
