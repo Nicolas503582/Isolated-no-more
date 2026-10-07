@@ -32,10 +32,11 @@ export class Entidad{
 
         inicio(){
             this.ctxOculto.drawImage(this.imagen, 0, 0);
-            this.cambiarColor(this.colores, this.tono);
+            this.cambiarColor(this.colores, this.tono, this.saturacion);
             //console.log(pincel.aNormal(this.ctxOculto, this.canvasOculto));
         }
         cambiarColor(color, tono = 50, saturacion = 50){
+            this.ctxOculto.drawImage(this.imagen, 0, 0);
             let Dataimage = pincel.aNormal(this.ctxOculto, this.canvasOculto);
             let Data = Dataimage.data;
             let colores_nuevos = [];
@@ -63,30 +64,30 @@ export class Entidad{
                     const diferencia = hsv_Data.h - colores_viejos_hsv[j].h;
                     if(Math.abs(diferencia) < 20){
                         if(hsv_Data.s > colores_viejos_hsv[j].s || hsv_Data.v > colores_viejos_hsv[j].v) colores_viejos_hsv[j].s = hsv_Data.s;
-                        aux = true;
+                        aux = true;/*
                         if(menor_s[j])
-                        {
+                        {*/
                             if(hsv_Data.s < menor_s)
                             {
-                                console.log("             Menor_S:     antes: " + menor_s + "  ahora: " + hsv_Data.s);
+                                //console.log("             Menor_S:     antes: " + menor_s + "  ahora: " + hsv_Data.s);
                                 menor_s = Math.floor(hsv_Data.s);
                             }
-                            else if(hsv_Data.s > mayor_s[j])
+                            else if(hsv_Data.s > mayor_s)
                             {
-                                console.log("             Mayor_S:     antes: " + mayor_s + "  ahora: " + hsv_Data.s);
+                                //console.log("             Mayor_S:     antes: " + mayor_s + "  ahora: " + hsv_Data.s);
                                 mayor_s = Math.floor(hsv_Data.s);
                             }
-                            if(hsv_Data.v < menor_v[j])
+                            if(hsv_Data.v < menor_v)
                             {
-                                console.log("             Menor_V:     antes: " + menor_v + "  ahora: " + hsv_Data.v);
+                                //console.log("             Menor_V:     antes: " + menor_v + "  ahora: " + hsv_Data.v);
                                 menor_v = Math.floor(hsv_Data.v);
                             }
-                            else if(hsv_Data.v > mayor_v[j])
+                            else if(hsv_Data.v > mayor_v)
                             {
-                                console.log("             Mayor_V:     antes: " + mayor_v + "  ahora: " + hsv_Data.v);
+                                //console.log("             Mayor_V:     antes: " + mayor_v + "  ahora: " + hsv_Data.v);
                                 mayor_v = Math.floor(hsv_Data.v);
                             }
-                        }
+                        //}
                         break;
                     }
                 }
@@ -105,60 +106,86 @@ export class Entidad{
             const nueva_saturacion = saturacion-50;
             let aux_tono = 0;
             let aux_s = 0;
-            if(nuevo_tono > 0)
+            /*if(nuevo_tono > 0)
             {
+                //console.log("mayor_v: " + mayor_v + " tono nuevo: " + nuevo_tono);
                 aux_tono = mayor_v + nuevo_tono;
                 if(aux_tono >95)
                 {
                     aux_tono = 95 - mayor_v;
                 }
+                else
+                {
+                    aux_tono = nuevo_tono;
+                }
             }
             else
             {
+                //console.log("menor_v: " + menor_v + " tono nuevo: " + nuevo_tono);
                 aux_tono = menor_v + nuevo_tono;
                 if(aux_tono <5)
                 {
                     aux_tono = menor_v;
                 }
+                else
+                {
+                    aux_tono = nuevo_tono;
+                }
             }
             if(nueva_saturacion > 0)
             {
+                //console.log("mayor_s: " + mayor_s + " saturacion nuevo: " + nueva_saturacion);
                 aux_s = mayor_s + nueva_saturacion;
                 if(aux_s >95)
                 {
                     aux_s = 95 - mayor_s;
                 }
+                else
+                {
+                    aux_s = nueva_saturacion;
+                }
             }
             else
             {
+               //console.log("menor_s: " + menor_s + " saturacion nuevo: " + nueva_saturacion);
                 aux_s = menor_s + nueva_saturacion;
                 if(aux_s <5)
                 {
                     aux_s = menor_s;
                 }
-            }
+                else
+                {
+                    aux_s = nueva_saturacion;
+                }
+            }*/
+            
             for(let i = 0; i < Data.length; i += 4){
                 const hsv_Data = calculo.rgbaToHsv(Data[i], Data[i + 1], Data[i + 2]);
                 let aux = false;
-                if(hsv_Data.v > 95 || hsv_Data.v < 5) continue;
+                //if(hsv_Data.v > 95 || hsv_Data.v < 5) continue;
                 for(let j = 0; j< colores_viejos.length && j < colores_nuevos.length; j++)
                 {
-
-                    const diferencia_h = hsv_Data.h - colores_viejos_hsv[j].h;
+                    //const diferencia_h = hsv_Data.h - colores_viejos_hsv[j].h;
                     /*const diferencia_s = hsv_Data.s - colores_viejos_hsv[j].s;
                     const diferencia_v = hsv_Data.v - colores_viejos_hsv[j].v;*/
-                    if(Math.abs(diferencia_h)<= 20)
-                    {
-                        hsv_Data.h = colores_nuevos_hsv[j].h/*+ diferencia_h*/;
+                    /*console.log("menor s: " + menor_s);
+                    console.log("menor v: " + menor_v);
+                    console.log("mayor v: " + mayor_v);
+                    console.log("mayor s: " + mayor_s);*/
+                    /*if(Math.abs(diferencia_h)<= 20)
+                    {*/
+                        hsv_Data.h = colores_nuevos_hsv[0].h/*+ diferencia_h*/;
                         if(hsv_Data.h < 0) hsv_Data.h += 360;
                         if(hsv_Data.h > 360) hsv_Data.h -= 360;
 
-                        //hsv_Data.s += nueva_saturacion - this.saturacion_viejo;
+                        hsv_Data.s += nueva_saturacion/* - this.saturacion_viejo*/;
+                        //hsv_Data.s = colores_nuevos_hsv[0].s;
                         if(hsv_Data.s < 0) hsv_Data.s = 0;
                         if(hsv_Data.s > 100) hsv_Data.s = 100;
 
                         //hsv_Data.v = colores_nuevos_hsv[j].v + diferencia_v;
-                        //hsv_Data.v += nuevo_tono - this.tono_viejo;
+                        hsv_Data.v += nuevo_tono/* - this.tono_viejo*/;
+                        //hsv_Data.v = colores_nuevos_hsv[0].v;
                         if(hsv_Data.v < 0) hsv_Data.v = 0;
                         if(hsv_Data.v > 100) hsv_Data.v = 100;
 
@@ -169,15 +196,12 @@ export class Entidad{
                         Data[i + 3] = Data[i + 3];
                         aux = true;
                         break;
-                    }
-                }
-                if(!aux)
-                {
-                    continue;
+                    //}
                 }
             }
             this.tono_viejo = aux_tono;
-            this.saturacion_viejo = aux_s;
+            this.saturacion_viejo = aux_s;//////////////28 ancho
+            //console.log(Dataimage);
             this.ctxOculto.putImageData(Dataimage, 0, 0);
         }
         guardarimagen(src) {

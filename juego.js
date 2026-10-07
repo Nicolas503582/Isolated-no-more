@@ -8,7 +8,7 @@ let canvas = document.getElementById("juego");
 let ctx = canvas.getContext("2d");
 
 let entidades = [];
-let robot1 = new Entidad(100, 100, "robot3.png", ["red", "blue", "green", "yellow", "orange", "purple", "pink", "brown", "black", "white"]);
+let robot1 = new Entidad(100, 100, "robot1.png", ["red", "blue", "green", "yellow", "orange", "purple", "pink", "brown", "black", "white"]);
 let h = 0;
 
 entidades.push(robot1);
@@ -44,7 +44,7 @@ function ajustarResolucionCanvas(can, contexto) {
 }
 
 window.addEventListener('wheel', (e) => {
-    h += e.deltaY/3;
+    h += (e.deltaY/3)/8;
     while(h < 0 || h > 360)
     {
         if(h > 360) h -=360;

@@ -67,8 +67,8 @@ function ajustarResolucionCanvas(can, contexto) {
     can.width = anchoVisual * dpr;
     can.height = altoVisual * dpr;
     
-    can.style.width = anchoVisual + "px";
-    can.style.height = altoVisual + "px";
+    /*can.style.width = anchoVisual + "px";
+    can.style.height = altoVisual + "px";*/
     
     contexto.scale(dpr, dpr);
     contexto.imageSmoothingEnabled = false; 
