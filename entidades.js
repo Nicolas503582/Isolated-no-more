@@ -10,7 +10,7 @@ export class Entidad{
             this.x = x;
             this.y = y;
             this.imagen = new Image();
-            this.imagenes = [];
+            this.imagenes = {"torso": "Robot1_torsoR1_post.png", "cabeza": "Robot1_cabezaR1_post.png", "brazo": "Robot1_brazoR1_post.png", "pierna": "Robot1_piernaR1_post.png"};
 
             this.canvasOculto = document.createElement('canvas');
             this.canvasOculto.width = 0;
@@ -21,6 +21,8 @@ export class Entidad{
             this.canvasAux.width = 1;
             this.canvasAux.height = 1;
             this.ctxAux = this.canvasAux.getContext('2d');
+            this.canvases = [];
+            this.ctxs = [];
 
             this.colores = colores_iniciales;
             this.tono_viejo = 0;
@@ -217,20 +219,69 @@ export class Entidad{
             this.canvasOculto.width = this.imagen.naturalWidth;
             this.canvasOculto.height = this.imagen.naturalHeight;
         }
+        cambiarcolores(colores, tonos = [50], saturaciones = [50]){
+            for(let i = 0; i < this.imagenes.length; i++){
+                recolor(this.imagenes[i], this.canvases[i], this.ctxs[i], colores[i], tonos[i], saturaciones[i]);
+                this.ctxOculto.drawImage(this.canvases[i], 0, 0);
+            }
+        }
+        recolor(sprite, canvas, ctx, color, tono, saturacion)
+        {
+            ///////////hay que adaptarlo para solo recolorear una parte
+            ctx.drawImage(sprite, 0, 0);
+            let Dataimage = pincel.aNormal(ctx, canvas);
+            let Data = Dataimage.data;
+
+            this.ctxAux.fillStyle = color;
+            this.ctxAux.fillRect(0, 0, 1, 1);
+            const colornuevo = this.ctxAux.getImageData(0, 0, 1, 1).data;
+            let color_hsv = calculo.rgbaToHsv(colornuevo[0], colornuevo[1], colornuevo[2]);
+
+            const nuevo_tono = tono-50;
+            const nueva_saturacion = saturacion-50;
+            
+            for(let i = 0; i < Data.length; i += 4){
+                const hsv_Data = calculo.rgbaToHsv(Data[i], Data[i + 1], Data[i + 2]);
+                //let aux = false;
+                if(hsv_Data.v > 95 || hsv_Data.v < 5) continue;
+                hsv_Data.h = color_hsv.h;
+                if(hsv_Data.h < 0) hsv_Data.h += 360;
+                if(hsv_Data.h > 360) hsv_Data.h -= 360;
+                hsv_Data.s += nueva_saturacion;
+                if(hsv_Data.s < 0) hsv_Data.s = 0;
+                if(hsv_Data.s > 100) hsv_Data.s = 100;
+                hsv_Data.v += nuevo_tono;
+                if(hsv_Data.v < 0) hsv_Data.v = 0;
+                if(hsv_Data.v > 100) hsv_Data.v = 100;
+                
+                
+                let colorFinal = calculo.hsvToRgba(hsv_Data.h, hsv_Data.s, hsv_Data.v);
+                Data[i] = colorFinal.r;
+                Data[i + 1] = colorFinal.g;
+                Data[i + 2] = colorFinal.b;
+                Data[i + 3] = Data[i + 3];
+            }
+            ctx.putImageData(Dataimage, 0, 0);
+        }
         guardarimagenes(src) {
             for(let i = 0; i < src.length; i++){
                 if(!this.imagenes[i]) this.imagenes.push(new Image());
                 this.imagenes[i].src = src[i];
                 this.imagenes[i].onload = () => {
-                    this.ctxOculto.drawImage(this.imagen, 0, 0);
+                    this.canvasOculto.width = this.imagenes[i].naturalWidth;
+                    this.canvasOculto.height = this.imagenes[i].naturalHeight;
+                    this.ctxOculto.drawImage(this.imagenes[i], 0, 0);
                     this.listo = true;
-                    this.canvasOculto.width = this.imagen.naturalWidth;
-                    this.canvasOculto.height = this.imagen.naturalHeight;
                     this.inicio();
                 }
-                this.canvasOculto.width = this.imagen.naturalWidth;
-                this.canvasOculto.height = this.imagen.naturalHeight;
+                this.canvases.push(document.createElement('canvas'));
+                this.canvases[i].width = this.imagenes[i].naturalWidth;
+                this.canvases[i].height = this.imagenes[i].naturalHeight;
+                this.ctxs.push(this.canvases[i].getContext('2d'));
             }
+        }
+        cambiarimagen(valor, clave){
+            this.imagenes[clave] = ("Robot1/" + valor + "png");
         }
         
         dibujar(can, ct, tamaño){
