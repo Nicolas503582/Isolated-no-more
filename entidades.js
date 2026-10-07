@@ -10,6 +10,7 @@ export class Entidad{
             this.x = x;
             this.y = y;
             this.imagen = new Image();
+            this.imagenes = [];
 
             this.canvasOculto = document.createElement('canvas');
             this.canvasOculto.width = 0;
@@ -216,6 +217,22 @@ export class Entidad{
             this.canvasOculto.width = this.imagen.naturalWidth;
             this.canvasOculto.height = this.imagen.naturalHeight;
         }
+        guardarimagenes(src) {
+            for(let i = 0; i < src.length; i++){
+                if(!this.imagenes[i]) this.imagenes.push(new Image());
+                this.imagenes[i].src = src[i];
+                this.imagenes[i].onload = () => {
+                    this.ctxOculto.drawImage(this.imagen, 0, 0);
+                    this.listo = true;
+                    this.canvasOculto.width = this.imagen.naturalWidth;
+                    this.canvasOculto.height = this.imagen.naturalHeight;
+                    this.inicio();
+                }
+                this.canvasOculto.width = this.imagen.naturalWidth;
+                this.canvasOculto.height = this.imagen.naturalHeight;
+            }
+        }
+        
         dibujar(can, ct, tamaño){
             //const normal = pincel.aNormal(this.ctxOculto, this.canvasOculto);
             if(!this.listo) return;

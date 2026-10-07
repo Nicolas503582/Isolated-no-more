@@ -34,12 +34,13 @@ let robot1 = new Entidad(0, 0, "robot3.png", ["red", "blue", "green", "yellow", 
 entidades.push(robot1);
 
 
-let h = 0;
+let h = 360;
 let v = 50;
 let s = 50;
 function loop() {
     ctx.fillStyle = "black";
-    ctx.fillRect(0,0, canvas.height, canvas.width);
+    ctx.clearRect(0,0, canvas.height, canvas.width);
+    ctx.clearRect(0, 0, 1000, 1000);
 
     h = valorActual;
     v = tonoActual;
@@ -94,38 +95,39 @@ selector_saturacion.addEventListener("input", function() {
 
 cabeza_mas.addEventListener("click", function(){
     cabeza += 1;
-    if(cabeza >2) cabeza = 2;
+    if(cabeza >2) cabeza = 0;
+    robot1.guardarimagen(("robot" + (cabeza +1) + ".png"));
 });
 cabeza_men.addEventListener("click", function(){
     cabeza -= 1;
-    if(cabeza <0) cabeza = 0;
+    if(cabeza <0) cabeza = 2;
 });
 
 torso_mas.addEventListener("click", function(){
    torso += 1;
-   if(torso >2) torso = 2;
+   if(torso >2) torso = 0;
 });
 torso_men.addEventListener("click", function(){
    torso -= 1;
-   if(torso <0) torso = 0;
+   if(torso <0) torso = 2;
 });
 
 brazo_mas.addEventListener("click", function(){
    brazo += 1;
-   if(brazo >2) brazo = 2;
+   if(brazo >2) brazo = 0;
 });
 brazo_men.addEventListener("click", function(){
    brazo -= 1;
-   if(brazo <0) brazo = 0;
+   if(brazo <0) brazo = 2;
 });
 
 pierna_mas.addEventListener("click", function(){
     pierna += 1;
-    if(pierna >2) pierna = 2;
+    if(pierna >2) pierna = 0;
 });
 pierna_men.addEventListener("click", function(){
     pierna -= 1;
-    if(pierna <0) pierna = 0;
+    if(pierna <0) pierna = 2;
 });
 
 loop();
