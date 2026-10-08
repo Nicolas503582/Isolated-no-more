@@ -219,8 +219,10 @@ export class Entidad{
         }
         guardarimagenes(src) {
             for(let i = 0; i < src.length; i++){
-                if(!this.imagenes[i]) this.imagenes.push(new Image());
-                this.imagenes[i].src = src[i];
+                if(!this.imagenes[i]){
+                  this.imagenes.push({[src[i][1]]: new Image()});
+                }
+                this.imagenes[i].src = src[i][0];
                 this.imagenes[i].onload = () => {
                     this.ctxOculto.drawImage(this.imagen, 0, 0);
                     this.listo = true;
@@ -231,6 +233,9 @@ export class Entidad{
                 this.canvasOculto.width = this.imagen.naturalWidth;
                 this.canvasOculto.height = this.imagen.naturalHeight;
             }
+        }
+        cambiarimagen(clave, imagen){
+            
         }
         
         dibujar(can, ct, tamaño){
