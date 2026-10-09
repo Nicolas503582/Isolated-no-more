@@ -11,55 +11,118 @@
         <canvas id = "selector">
 
         </canvas>
-        <div class="partes_cuerpo">
-            <div id="barras">
-                <input type="range" min="0" max="360" value="0"   id = "selector_de_color">
-                <input type="range" min="0" max="100" value="50" id = "selector_de_tono">
-                <input type="range" min="0" max="100" value="50" id = "selector_de_saturacion">
-            </div>
+        <form action="juego.php" method="post">
+            <div class="partes_cuerpo">
+                <div id="barras">
+                    <input type="range" min="0" max="360" value="0"   id = "selector_de_color" name="color_general">
+                    <input type="range" min="0" max="100" value="50" id = "selector_de_saturacion" name="saturacion">
+                    <input type="range" min="0" max="100" value="50" id = "selector_de_tono" name="tono">
+                </div>
 
-            </input>
-            <div class="parte_cuerpo">
-                <p>cabeza</p>
-                <button id="cabeza_-">
-                    ←
-                </button>
-                <button id="cabeza_+">
-                    →
-                </button>
-            </div>
+                </input>
+                <div class="parte_cuerpo" name="id_cabeza">
+                    <p>cabeza</p>
+                    <button id="cabeza_-">
+                        ←
+                    </button>
+                    <button id="cabeza_+">
+                        →
+                    </button>
+                </div>
 
-            <div class="parte_cuerpo">
-                <p>torso</p>
-                <button id="torso_-">
-                    ←
-                </button>
-                <button id="torso_+">
-                    →
-                </button>
-            </div>
+                <div class="parte_cuerpo" name="id_torso">
+                    <p>torso</p>
+                    <button id="torso_-">
+                        ←
+                    </button>
+                    <button id="torso_+">
+                        →
+                    </button>
+                </div>
 
-            <div class="parte_cuerpo">
-                <p>brazo</p>
-                <button id="brazo_-">
-                    ←
-                </button>
-                <button id="brazo_+">
-                    →
-                </button>
-            </div>
+                <div class="parte_cuerpo" name="id_brazo">
+                    <p>brazo</p>
+                    <button id="brazo_-">
+                        ←
+                    </button>
+                    <button id="brazo_+">
+                        →
+                    </button>
+                </div>
 
-            <div class="parte_cuerpo">
-                <p>pierna</p>
-                <button id="pierna_-">
-                    ←
-                </button>
-                <button id="pierna_+">
-                    →
-                </button>
+                <div class="parte_cuerpo" name="id_pierna">
+                    <p>pierna</p>
+                    <button id="pierna_-">
+                        ←
+                    </button>
+                    <button id="pierna_+">
+                        →
+                    </button>
+                </div>
             </div>
-        </div>
+            <button type="submit">
+                Crear Partida
+            </button>
+        </form>
     </div>
+
+    <script type="module">
+        import { calculos } from "./general.js";
+        const calculo = new calculos();
+        const rango = [0, 15, 30, 45, 60, 75, 90, 100];
+        let color = document.getElementById("selector_de_color");
+        let tono = document.getElementById("selector_de_tono");
+        let saturacion = document.getElementById("selector_de_saturacion");
+        let brillo_Actual = 50;
+        let color_actual = 0;
+
+        let estilo_tono = "linear-gradient(to right";
+        color_actual = color.value;
+        const color_hsv = calculo.hsvToRgba(color_actual, 100, brillo_Actual);
+        let colores_tonos = [];
+        /*gradient(to right, red 0%, rgb(255, 230, 0) 15%, rgb(51, 255, 0) 30%, rgb(0, 255, 179) 45%, rgb(0, 102, 255) 60%, rgb(128, 0, 255) 75%, rgb(255, 0, 153) 90%, rgb(255, 0, 0) 100%);*/
+        
+        rango.forEach(numero => {
+            const color_transicion = calculo.hsvToRgba(color_actual, numero, brillo_Actual);
+            let text_color = ", rgb(" + color_transicion.r + ", " + color_transicion.g + ", " + color_transicion.b + ") " + numero + "%";
+            estilo_tono = estilo_tono + text_color;
+        });
+        estilo_tono = estilo_tono + ")";
+        saturacion.style.background = estilo_tono;
+
+        color.addEventListener("input", function() {
+            let estilo_tono = "linear-gradient(to right";
+            color_actual = color.value;
+            const color_hsv = calculo.hsvToRgba(color_actual, 100, brillo_Actual);
+            let colores_tonos = [];
+            /*gradient(to right, red 0%, rgb(255, 230, 0) 15%, rgb(51, 255, 0) 30%, rgb(0, 255, 179) 45%, rgb(0, 102, 255) 60%, rgb(128, 0, 255) 75%, rgb(255, 0, 153) 90%, rgb(255, 0, 0) 100%);*/
+            
+            rango.forEach(numero => {
+                const color_transicion = calculo.hsvToRgba(color_actual, numero, brillo_Actual);
+                let text_color = ", rgb(" + color_transicion.r + ", " + color_transicion.g + ", " + color_transicion.b + ") " + numero + "%";
+                estilo_tono = estilo_tono + text_color;
+            });
+            estilo_tono = estilo_tono + ")";
+            saturacion.style.background = estilo_tono;
+        });
+
+        tono.addEventListener("input", function(){
+            brillo_Actual = tono.value;
+            let estilo_tono = "linear-gradient(to right";
+            const color_hsv = calculo.hsvToRgba(color_actual, 100, brillo_Actual);
+            let colores_tonos = [];
+            /*gradient(to right, red 0%, rgb(255, 230, 0) 15%, rgb(51, 255, 0) 30%, rgb(0, 255, 179) 45%, rgb(0, 102, 255) 60%, rgb(128, 0, 255) 75%, rgb(255, 0, 153) 90%, rgb(255, 0, 0) 100%);*/
+            
+            rango.forEach(numero => {
+                const color_transicion = calculo.hsvToRgba(color_actual, numero, brillo_Actual);
+                let text_color = ", rgb(" + color_transicion.r + ", " + color_transicion.g + ", " + color_transicion.b + ") " + numero + "%";
+                estilo_tono = estilo_tono + text_color;
+            });
+            estilo_tono = estilo_tono + ")";
+            saturacion.style.background = estilo_tono;
+        });
+    
+    </script>
 
     <script type="module" src ="selector.js"></script>
 </body>

@@ -1,4 +1,3 @@
-
 import { Entidad } from "./entidades.js";
 import { calculos } from "./general.js";
 

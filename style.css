@@ -9,14 +9,16 @@ canvas{
     background-color: black;
     border: 5px solid white;
 }
-/*#selector_de_color{
-  -webkit-appearance: none; 
+input[type="range"]{
   appearance: none;
   background: linear-gradient(to right, red 0%, rgb(255, 230, 0) 15%, rgb(51, 255, 0) 30%, rgb(0, 255, 179) 45%, rgb(0, 102, 255) 60%, rgb(128, 0, 255) 75%, rgb(255, 0, 153) 90%, rgb(255, 0, 0) 100%);
   accent-color: #ff5722;  
   height: 8px;              
   border-radius: 4px;
-}*/
+}
+#selector_de_tono{
+    background: linear-gradient(to right, black 0%, white 100%);
+}
 .parte_cuerpo{
     display: flex;
 }

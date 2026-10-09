@@ -34,21 +34,29 @@ let robot1 = new Entidad(0, 0, "robot3.png", ["red", "blue", "green", "yellow", 
 entidades.push(robot1);
 
 
-let h = 360;
+let h = 280;
 let v = 50;
 let s = 50;
+
+saturacionActual = selector_saturacion.value;
+tonoActual = selector_value.value;
+valorActual = selector.value;
+
+const color_nuevo0 = calculo.hsvToRgba(h, 100, 100);
+robot1.cambiarColor([`rgb(${color_nuevo0.r},${color_nuevo0.g},${color_nuevo0.b})`], v, s);
 function loop() {
     ctx.fillStyle = "black";
     ctx.clearRect(0,0, canvas.height, canvas.width);
     ctx.clearRect(0, 0, 1000, 1000);
-
-    h = valorActual;
-    v = tonoActual;
-    s = saturacionActual;
     //console.log(s);
     
     const color_nuevo = calculo.hsvToRgba(h, 100, 100);
     robot1.cambiarColor([`rgb(${color_nuevo.r},${color_nuevo.g},${color_nuevo.b})`], v, s);
+
+
+    h = valorActual;
+    v = tonoActual;
+    s = saturacionActual;
 
     entidades.forEach(entidad => {
         entidad.dibujar(canvas, ctx, 10);
