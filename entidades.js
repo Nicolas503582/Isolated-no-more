@@ -5,10 +5,12 @@ const pincel = new dibujo();
 const calculo = new calculos();
 
 export class Entidad{
-        constructor(x, y, imagen = "", colores_iniciales, tono = 50, saturacion = 50){
+        constructor(x, y, velocidad = 1, imagen = "", colores_iniciales = ["red"], tono = 50, saturacion = 50){
             //this.listo = false;
-            this.x = x;
-            this.y = y;
+            this.x = x; //x actual
+            this.y = y; //y actual
+            this.velocidad = velocidad;
+
             this.imagen = new Image();
             this.imagenes = {"torso": "Robot1_torsoR1_post.png", "cabeza": "Robot1_cabezaR1_post.png", "brazo": "Robot1_brazoR1_post.png", "pierna": "Robot1_piernaR1_post.png"};
 
