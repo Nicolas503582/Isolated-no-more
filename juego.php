@@ -1,4 +1,5 @@
 <?php
+/*
 $color_general = $_POST["color_general"];
 $saturacion = $_POST["saturacion"];
 $tono = $_POST["tono"];
@@ -11,7 +12,7 @@ $color_pierna = $_POST["color_pierna"];
 $id_cabeza = $_POST["id_cabeza"];
 $id_torso =  $_POST["id_torso"];
 $id_brazo =  $_POST["id_brazo"];
-$id_pierna = $_POST["id_pierna"];
+$id_pierna = $_POST["id_pierna"];*/
 ?>
 
 <!DOCTYPE html>
